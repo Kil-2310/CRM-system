@@ -14,6 +14,7 @@ from pathlib import Path
 from os import getenv
 import logging.config
 
+from django.urls import reverse_lazy
 from dotenv import load_dotenv
 
 env_file = Path(__file__).parent.parent.parent / ".env"
@@ -170,3 +171,13 @@ logging.config.dictConfig({
         },
     },
 })
+
+# Редиректы для аутентификации
+LOGIN_REDIRECT_URL = '/admin/'
+LOGIN_URL = reverse_lazy("authentication:login")
+
+# Данные для тестирования приложения
+USER_DATA_TESTING = {
+    "username": "bob",
+    "password": "123"
+}
