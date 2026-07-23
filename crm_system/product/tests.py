@@ -7,7 +7,6 @@ from crm_system.settings import USER_DATA_TESTING
 from .models import Product
 
 TEST_PRODUCT_DATA = {
-    'id': 1,
     'name': 'Test',
     'description': 'Test',
     'cost': 100
