@@ -1,18 +1,15 @@
-from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.shortcuts import render, reverse
 from django.urls import reverse_lazy
 
 from .models import Product
+from utils.group_mixin import GroupRequiredMixin
 
-
-# Роль - Маркетолог
 
 class ProductListView(ListView):
     """Список продуктов"""
     model = Product
     template_name = "product/products-list.html"
+    context_object_name = "products"
 
 
 class ProductDetailView(DetailView):
@@ -21,21 +18,33 @@ class ProductDetailView(DetailView):
     template_name = "product/products-detail.html"
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(GroupRequiredMixin, CreateView):
     """Создание продукта"""
+    group_required = 'Managers'
+
     model = Product
     template_name = "product/products-create.html"
-    fields = "__all__"
+    fields = "name", "description", "cost"
+
+    success_url = reverse_lazy("product:product_list")
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(GroupRequiredMixin, UpdateView):
     """Обновление продукта"""
+    group_required = 'Managers'
+
     model = Product
-    template_name = "product/products-update.html"
-    fields = "__all__"
+    template_name = "product/products-edit.html"
+    fields = "name", "description", "cost"
+
+    success_url = reverse_lazy("product:product_list")
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(GroupRequiredMixin, DeleteView):
     """Удаление продукта"""
+    group_required = 'Managers'
+
     model = Product
     template_name = "product/products-delete.html"
+
+    success_url = reverse_lazy("product:product_list")

@@ -19,6 +19,7 @@ services:
       sh -c "
         python /app/crm_system/manage.py collectstatic --noinput &&
         python /app/crm_system/manage.py migrate &&
+        python /app/crm_system/manage.py loaddata /app/crm_system/site_data.json &&
         gunicorn --chdir /app/crm_system --bind 0.0.0.0:8000 crm_system.wsgi:application
       "
     ports:
