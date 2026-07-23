@@ -51,6 +51,7 @@ INSTALLED_APPS = [
 
     'authentication.apps.AuthenticationConfig',
     'product.apps.ProductConfig',
+    'lead.apps.LeadConfig',
 ]
 
 MIDDLEWARE = [
