@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'authentication.apps.AuthenticationConfig',
     'product.apps.ProductConfig',
     'lead.apps.LeadConfig',
+    'contract.apps.ContractConfig',
 ]
 
 MIDDLEWARE = [
@@ -148,6 +149,11 @@ USE_TZ = True
 # ============== СТАТИКА (локально) ==============
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Настойка Media
+
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
 
 # ============== LOGGING ==============
 LOGLEVEL = getenv("DJANGO_LOGLEVEL", "INFO")
