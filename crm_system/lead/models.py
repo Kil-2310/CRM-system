@@ -9,3 +9,6 @@ class Lead(models.Model):
     email = models.EmailField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return f'Lead {self.last_name} {self.first_name}'
