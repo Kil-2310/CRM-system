@@ -27,7 +27,8 @@ class CustomerCreate(PermissionRequiredMixin, CreateView):
     permission_required = "customer.add_customer"
 
     queryset = Customer.objects.all().defer('created_at', 'updated_at')
-    template_name = 'customer/customer-create.html'
+    template_name = 'customer/customers-create.html'
+    fields = ('lead' ,)
 
     success_url = reverse_lazy('customer:customer_list')
 
@@ -37,7 +38,8 @@ class CustomerUpdate(PermissionRequiredMixin, UpdateView):
     permission_required = "customer.change_customer"
 
     queryset = Customer.objects.all().defer('created_at', 'updated_at')
-    template_name = 'customer/customer-edit.html'
+    template_name = 'customer/customers-edit.html'
+    fields = ('lead' ,)
 
     success_url = reverse_lazy('customer:customer_list')
 
@@ -47,6 +49,6 @@ class CustomerDelete(PermissionRequiredMixin, DeleteView):
     permission_required = "customer.delete_customer"
 
     queryset = Customer.objects.all().defer('created_at', 'updated_at')
-    template_name = 'customer/customer-delete.html'
+    template_name = 'customer/customers-delete.html'
 
     success_url = reverse_lazy('customer:customer_list')

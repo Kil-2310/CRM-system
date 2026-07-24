@@ -1,3 +1,9 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Customer
+
+
+@admin.register(Customer)
+class CustomerAdmin(admin.ModelAdmin):
+    """Модель админки для активного клиента"""
+    list_display = ('id', 'lead__first_name', 'lead__last_name',)
