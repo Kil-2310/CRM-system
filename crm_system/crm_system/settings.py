@@ -183,7 +183,7 @@ logging.config.dictConfig({
 })
 
 # Редиректы для аутентификации
-LOGIN_REDIRECT_URL = '/admin/'
+LOGIN_REDIRECT_URL = reverse_lazy("user:application_metrics_list")
 LOGIN_URL = reverse_lazy("authentication:login")
 
 # Данные для тестирования приложения
