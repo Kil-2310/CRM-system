@@ -150,6 +150,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# Настойка Media
+
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+
 # ============== LOGGING ==============
 LOGLEVEL = getenv("DJANGO_LOGLEVEL", "INFO")
 
