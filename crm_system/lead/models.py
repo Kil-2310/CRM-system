@@ -12,7 +12,7 @@ class Lead(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    # Рекламная услуга, из которой пришел потенциальный клмент
+    # Рекламная услуга, из которой пришел потенциальный клиент
     ad = models.ForeignKey(Ad, on_delete=models.CASCADE, related_name='leads')
 
     def __str__(self) -> str:

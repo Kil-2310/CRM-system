@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.db.models import Sum
@@ -9,15 +9,19 @@ from .models import Ad
 from customer.models import Customer
 
 
-class AdListView(LoginRequiredMixin, ListView):
+class AdListView(PermissionRequiredMixin, ListView):
     """Список рекламных компаний"""
+    permission_required = 'ad.view_ad'
+
     queryset = Ad.objects.all().only('name', 'budget', 'channel', 'product')
     template_name = "ad/ads-list.html"
     context_object_name = 'ads'
 
 
-class AdDetailView(LoginRequiredMixin, DetailView):
+class AdDetailView(PermissionRequiredMixin, DetailView):
     """Детали рекламной компании"""
+    permission_required = 'ad.view_ad'
+
     queryset = Ad.objects.all().only('name', 'budget', 'channel', 'product')
     template_name = "ad/ads-detail.html"
 
@@ -47,17 +51,17 @@ class AdUpdateView(PermissionRequiredMixin, UpdateView):
         response = super().form_valid(form)
 
         sum_contracts = Customer.objects.filter(
-            lead__ad=self
+            lead__ad=self.object
         ).aggregate(
             total=Sum('contract__cost')
         )['total']
 
         if sum_contracts == 0:
-            self.profit = 0
+            self.object.profit = 0
         else:
-            self.profit = round(Decimal(str(sum_contracts)) / Decimal(str(self.budget)), 2)
+            self.object.profit = round(Decimal(str(sum_contracts)) / Decimal(str(self.object.budget)), 2)
 
-        self.save()
+        self.object.save()
         return response
 
 
@@ -71,8 +75,10 @@ class AdDeleteView(PermissionRequiredMixin, DeleteView):
     success_url = reverse_lazy('ad:ad_list')
 
 
-class AdStatisticView(LoginRequiredMixin, ListView):
+class AdStatisticView(PermissionRequiredMixin, ListView):
     """Получение статистики рекламных компаний"""
+    permission_required = 'ad.view_ad'
+
     queryset = Ad.objects.all().defer('created_at', 'updated_at')
     template_name = "ad/ads-statistic.html"
     context_object_name = 'ads'

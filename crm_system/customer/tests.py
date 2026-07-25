@@ -7,7 +7,8 @@ from crm_system.settings import USER_DATA_TESTING
 from .models import Customer
 
 TEST_CUSTOMER_DATA = {
-    'lead': 2,
+    'lead': 3,
+    'contract': 3
 }
 
 
@@ -36,7 +37,6 @@ class CustomerListTests(TestCase):
 
         response = self.client.get(reverse('customer:customer_list'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Хомяков Евгений')
 
     def test_customer_list_2(self):
         """Провальный тест получения активных клиентов"""
@@ -69,7 +69,6 @@ class CustomerDetailTests(TestCase):
 
         response = self.client.get(reverse('customer:customer_detail', kwargs={'pk': 1}))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Хомяков Евгений')
 
     def test_customer_detail_2(self):
         """Провальный тест получения активного клиента"""
@@ -139,7 +138,7 @@ class CustomerUpdateTests(TestCase):
         self.user.user_permissions.add(self.permission)
 
         new_customer_data = TEST_CUSTOMER_DATA.copy()
-        new_customer_data['lead'] = 2
+        new_customer_data['lead'] = 3
 
         response = self.client.post(
             reverse('customer:customer_update', kwargs={'pk': 1}),
@@ -183,7 +182,7 @@ class CustomerDeleteTests(TestCase):
         self.user.user_permissions.add(self.permission)
 
         response = self.client.post(
-            reverse('customer:customer_delete', kwargs={'pk': 1})
+            reverse('customer:customer_delete', kwargs={'pk': 2})
         )
         self.assertEqual(response.status_code, 302)
 

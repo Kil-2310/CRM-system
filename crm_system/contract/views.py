@@ -50,7 +50,7 @@ class ContractUpdateView(PermissionRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        ad = Ad.objects.get(product=self.product)
+        ad = Ad.objects.get(product=self.object.product)
 
         sum_contracts = Customer.objects.filter(
             lead__ad=ad

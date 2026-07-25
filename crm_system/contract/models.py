@@ -14,7 +14,7 @@ class Contract(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     # Услуга, на которую создается контракт
-    product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name='contracts')
+    product = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL, related_name='contracts')
 
     def __str__(self) -> str:
         return f'Contract {self.name}'

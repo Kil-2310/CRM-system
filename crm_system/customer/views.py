@@ -39,7 +39,6 @@ class CustomerCreate(PermissionRequiredMixin, CreateView):
     success_url = reverse_lazy('customer:customer_list')
 
     def form_valid(self, form):
-        # Обновление статистики рекламной компании при удалении активного клиента
         response = super().form_valid(form)
         lead = self.object.lead
         ad = lead.ad
@@ -47,15 +46,16 @@ class CustomerCreate(PermissionRequiredMixin, CreateView):
         ad.customers_count += 1
         sum_contracts = Customer.objects.filter(lead__ad=ad).aggregate(
             total=Sum('contract__cost')
-        )['total']
+        )['total'] or 0
 
-        if sum_contracts == 0:
-            ad.profit = 0
-        else:
+        if sum_contracts > 0 and ad.budget > 0:
             ad.profit = round((Decimal(str(sum_contracts)) / Decimal(str(ad.budget))), 2)
+        else:
+            ad.profit = Decimal('0')
 
         ad.save()
         return response
+
 
 class CustomerUpdate(PermissionRequiredMixin, UpdateView):
     """Обновление активного клиента"""
@@ -81,7 +81,6 @@ class CustomerDelete(PermissionRequiredMixin, DeleteView):
     success_url = reverse_lazy('customer:customer_list')
 
     def form_valid(self, form):
-        # Обновление статистики рекламной компании при удалении активного клиента
         response = super().form_valid(form)
         lead = self.object.lead
         ad = lead.ad
@@ -89,12 +88,12 @@ class CustomerDelete(PermissionRequiredMixin, DeleteView):
         ad.customers_count -= 1
         sum_contracts = Customer.objects.filter(lead__ad=ad).aggregate(
             total=Sum('contract__cost')
-        )['total']
+        )['total'] or 0
 
-        if sum_contracts == 0:
-            ad.profit = 0
-        else:
+        if sum_contracts > 0 and ad.budget > 0:
             ad.profit = round((Decimal(str(sum_contracts)) / Decimal(str(ad.budget))), 2)
+        else:
+            ad.profit = Decimal('0')
 
         ad.save()
         return response
