@@ -4,6 +4,7 @@ from django.views.generic import TemplateView
 from lead.models import Lead
 from product.models import Product
 from customer.models import Customer
+from ad.models import Ad
 
 
 class ApplicationMetricsListView(LoginRequiredMixin, TemplateView):
@@ -14,7 +15,7 @@ class ApplicationMetricsListView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
 
         context['products_count'] = Product.objects.count()
-        context['advertisements_count'] = 10 # TODO: не забыть изменить заглушку
+        context['advertisements_count'] = Ad.objects.count()
         context['leads_count'] = Lead.objects.count()
         context['customers_count'] = Customer.objects.count()
 
