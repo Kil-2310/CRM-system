@@ -8,12 +8,13 @@ class Contract(models.Model):
     name = models.CharField(max_length=255)
     start_date = models.DateField()
     end_date = models.DateField()
-    cost = models.IntegerField()
+    cost = models.IntegerField(default=0)
     file = models.FileField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name='contracts')
+    # Услуга, на которую создается контракт
+    product = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL, related_name='contracts')
 
     def __str__(self) -> str:
         return f'Contract {self.name}'

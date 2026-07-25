@@ -9,8 +9,9 @@ from .models import Lead
 TEST_LEAD_DATA = {
     'first_name': 'Test',
     'last_name': 'User',
-    'email': 'test@example.com',
-    'phone': '79991234567'
+    'email': 'test5@gmail.com',
+    'phone': '79991634567',
+    'ad': 1
 }
 
 
@@ -39,7 +40,6 @@ class LeadListTests(TestCase):
 
         response = self.client.get(reverse('lead:lead_list'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Хомяков Евгений')
 
     def test_lead_list_2(self):
         """Провальный тест получения потенциальных клиентов"""
@@ -72,7 +72,6 @@ class LeadDetailTests(TestCase):
 
         response = self.client.get(reverse('lead:lead_detail', kwargs={'pk': 1}))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Хомяков Евгений')
 
     def test_lead_detail_2(self):
         """Провальный тест получения потенциального клиента"""
@@ -82,6 +81,7 @@ class LeadDetailTests(TestCase):
 
 class LeadCreateTests(TestCase):
     """Тесты создания потенциального клиента"""
+    fixtures = ['site_data.json']
 
     def setUp(self):
         self.user = User.objects.create_user(

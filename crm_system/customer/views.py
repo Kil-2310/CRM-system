@@ -1,6 +1,9 @@
+from decimal import Decimal
+
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.db.models import Sum
 
 from .models import Customer
 
@@ -26,11 +29,32 @@ class CustomerCreate(PermissionRequiredMixin, CreateView):
     """Создание активного клиента"""
     permission_required = "customer.add_customer"
 
-    queryset = Customer.objects.all().defer('created_at', 'updated_at')
+    queryset = (
+        Customer.objects.all().defer('created_at', 'updated_at')
+        .select_related('lead', 'lead__ad')
+    )
     template_name = 'customer/customers-create.html'
-    fields = ('lead' ,)
+    fields = 'lead', 'contract'
 
     success_url = reverse_lazy('customer:customer_list')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        lead = self.object.lead
+        ad = lead.ad
+
+        ad.customers_count += 1
+        sum_contracts = Customer.objects.filter(lead__ad=ad).aggregate(
+            total=Sum('contract__cost')
+        )['total'] or 0
+
+        if sum_contracts > 0 and ad.budget > 0:
+            ad.profit = round((Decimal(str(sum_contracts)) / Decimal(str(ad.budget))), 2)
+        else:
+            ad.profit = Decimal('0')
+
+        ad.save()
+        return response
 
 
 class CustomerUpdate(PermissionRequiredMixin, UpdateView):
@@ -39,7 +63,7 @@ class CustomerUpdate(PermissionRequiredMixin, UpdateView):
 
     queryset = Customer.objects.all().defer('created_at', 'updated_at')
     template_name = 'customer/customers-edit.html'
-    fields = ('lead' ,)
+    fields = 'lead', 'contract'
 
     success_url = reverse_lazy('customer:customer_list')
 
@@ -48,7 +72,28 @@ class CustomerDelete(PermissionRequiredMixin, DeleteView):
     """Удаление потенциального клиента"""
     permission_required = "customer.delete_customer"
 
-    queryset = Customer.objects.all().defer('created_at', 'updated_at')
+    queryset = (
+        Customer.objects.all().defer('created_at', 'updated_at')
+        .select_related('lead', 'lead__ad')
+    )
     template_name = 'customer/customers-delete.html'
 
     success_url = reverse_lazy('customer:customer_list')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        lead = self.object.lead
+        ad = lead.ad
+
+        ad.customers_count -= 1
+        sum_contracts = Customer.objects.filter(lead__ad=ad).aggregate(
+            total=Sum('contract__cost')
+        )['total'] or 0
+
+        if sum_contracts > 0 and ad.budget > 0:
+            ad.profit = round((Decimal(str(sum_contracts)) / Decimal(str(ad.budget))), 2)
+        else:
+            ad.profit = Decimal('0')
+
+        ad.save()
+        return response

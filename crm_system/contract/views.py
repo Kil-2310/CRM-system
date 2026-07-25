@@ -1,8 +1,13 @@
+from decimal import Decimal
+
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.db.models import Sum
 
 from .models import Contract
+from ad.models import Ad
+from customer.models import Customer
 
 
 class ContractListView(PermissionRequiredMixin, ListView):
@@ -28,20 +33,38 @@ class ContractCreateView(PermissionRequiredMixin, CreateView):
 
     queryset = Contract.objects.all().defer('created_at', 'updated_at')
     template_name = 'contract/contracts-create.html'
-    fields = 'name', 'start_date', 'end_date', 'cost', 'product'
+    fields = 'name', 'start_date', 'end_date', 'cost', 'product', 'file'
 
     success_url = reverse_lazy('contract:contract_list')
 
 
 class ContractUpdateView(PermissionRequiredMixin, UpdateView):
-    """Обновление контракта"""
+    """Обновление статистики рекламной компании при обновлении контракта"""
     permission_required = 'contract.change_contract'
 
-    queryset = Contract.objects.all().defer('created_at', 'updated_at')
+    queryset = Contract.objects.all().defer('created_at', 'updated_at').select_related('product')
     template_name = 'contract/contracts-edit.html'
-    fields = 'name', 'start_date', 'end_date', 'cost', 'product'
+    fields = 'name', 'start_date', 'end_date', 'cost', 'product', 'file'
 
     success_url = reverse_lazy('contract:contract_list')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        ad = Ad.objects.get(product=self.object.product)
+
+        sum_contracts = Customer.objects.filter(
+            lead__ad=ad
+        ).aggregate(
+            total=Sum('contract__cost')
+        )['total']
+
+        if sum_contracts == 0:
+            ad.profit = 0
+        else:
+            ad.profit = round(Decimal(str(sum_contracts)) / Decimal(str(ad.budget)), 2)
+
+        ad.save()
+        return response
 
 
 class ContractDeleteView(PermissionRequiredMixin, DeleteView):

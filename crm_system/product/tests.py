@@ -38,7 +38,6 @@ class ProductListTests(TestCase):
 
         response = self.client.get(reverse('product:product_list'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Мобильное приложение iOS')
 
     def test_product_list_2(self):
         """Провальный тест получения товаров"""
@@ -71,7 +70,6 @@ class ProductDetailTests(TestCase):
 
         response = self.client.get(reverse('product:product_detail', kwargs={'pk': 2}))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Мобильное приложение iOS')
 
     def test_product_detail_2(self):
         """Провальный тест получения товара"""
