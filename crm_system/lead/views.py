@@ -3,6 +3,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.urls import reverse_lazy
 
 from .models import Lead
+from .utils import update_ad
 
 
 class LeadListView(PermissionRequiredMixin, ListView):
@@ -35,9 +36,7 @@ class LeadCreateView(PermissionRequiredMixin, CreateView):
     def form_valid(self, form):
         # Обновление статистики рекламной компании при создании потенциального клиента
         response = super().form_valid(form)
-        ad = self.object.ad
-        ad.leads_count += 1
-        ad.save()
+        update_ad(self.object, 'add')
         return response
 
 
@@ -64,7 +63,5 @@ class LeadDeleteView(PermissionRequiredMixin, DeleteView):
     def form_valid(self, form):
         # Обновление статистики рекламной компании при удалении потенциального клиента
         response = super().form_valid(form)
-        ad = self.object.ad
-        ad.leads_count -= 1
-        ad.save()
+        update_ad(self.object, 'remove')
         return response

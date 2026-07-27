@@ -194,3 +194,36 @@ class AdDeleteTests(TestCase):
             reverse('ad:ad_delete', kwargs={'pk': 1})
         )
         self.assertEqual(response.status_code, 403)
+
+
+class AdStatistic(TestCase):
+    """Тесты для получения статистики"""
+    fixtures = ['site_data.json']
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            **USER_DATA_TESTING
+        )
+        self.client.force_login(self.user)
+
+        content_type = ContentType.objects.get_for_model(Ad)
+        self.permission = Permission.objects.get(
+            codename='view_ad',
+            content_type=content_type,
+        )
+
+    def tearDown(self):
+        self.user.delete()
+
+    def test_ad_statistic_1(self):
+        """Успешное получение статистики"""
+        self.user.user_permissions.add(self.permission)
+
+        response = self.client.get(reverse('ad:ad_statistic'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_ad_statistic_2(self):
+        """провальное получение статистики"""
+
+        response = self.client.get(reverse('ad:ad_statistic'))
+        self.assertEqual(response.status_code, 403)

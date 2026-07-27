@@ -1,3 +1,6 @@
+from decimal import Decimal
+from typing import Union
+
 from django.db import models
 
 from product.models import Product
@@ -19,3 +22,11 @@ class Ad(models.Model):
 
     def __str__(self) -> str:
         return f'Ab {self.name}'
+
+    @classmethod
+    def update_profit(cls, ad: 'Ad', sum_contracts: Union[int, float]) -> None:
+        """Обновление профита рекламной компании"""
+        if sum_contracts > 0 and ad.budget > 0:
+            ad.profit = round((Decimal(str(sum_contracts)) / Decimal(str(ad.budget))), 2)
+        else:
+            ad.profit = Decimal('0')
