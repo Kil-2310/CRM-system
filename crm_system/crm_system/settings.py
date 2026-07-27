@@ -14,6 +14,7 @@ from pathlib import Path
 from os import getenv
 import logging.config
 
+from django.template.defaultfilters import join
 from django.urls import reverse_lazy
 from dotenv import load_dotenv
 
@@ -38,6 +39,9 @@ ALLOWED_HOSTS = [
     "0.0.0.0",
     "localhost",
 ] + getenv("DJANGO_ALLOWED_HOSTS", "").split(",")
+
+if not DEBUG:
+    CSRF_TRUSTED_ORIGINS = getenv("DJANGO_DOMAIN", "").split(",")
 
 # Application definition
 

@@ -1,13 +1,9 @@
-from decimal import Decimal
-
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from django.db.models import Sum
 
 from .models import Contract
-from ad.models import Ad
-from customer.models import Customer
+from .utils import update_ad
 
 
 class ContractListView(PermissionRequiredMixin, ListView):
@@ -50,20 +46,7 @@ class ContractUpdateView(PermissionRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        ad = Ad.objects.get(product=self.object.product)
-
-        sum_contracts = Customer.objects.filter(
-            lead__ad=ad
-        ).aggregate(
-            total=Sum('contract__cost')
-        )['total']
-
-        if sum_contracts == 0:
-            ad.profit = 0
-        else:
-            ad.profit = round(Decimal(str(sum_contracts)) / Decimal(str(ad.budget)), 2)
-
-        ad.save()
+        update_ad(self.object)
         return response
 
 

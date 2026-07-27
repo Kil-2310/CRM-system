@@ -45,12 +45,15 @@
 
 ### Настройка проекта и установка ПО
 
-Перед запуском проекта необходимо создать файл .env в корне проекта (пример заполнения указан ниже) и установить Docker, по ссылке: https://docs.docker.com/engine/install/
+Перед запуском проекта необходимо:
 
+Установить Docker, по ссылке: https://docs.docker.com/engine/install/. Поставить плагин для логирования, коммандой: docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions Заполнить .env файл в корне проекта, по примеру, указанному ниже:
+    
     DJANGO_SECRET_KEY='django-insecure-$mo#_fhs_)4%_xfqel7b$d6jmu*n8i#wmlrqw=v_^t-s3@g+gt'
-    DJANGO_DEBUG=0
+    DJANGO_DEBUG=1
     DJANGO_LOGLEVEL=INFO
     DJANGO_ALLOWED_HOSTS=
+    DJANGO_DOMAIN=
     
     POSTGRES_USER=admin
     POSTGRES_PASSWORD=123
@@ -75,14 +78,10 @@ docker compose down
 
 ### URL приложения
 
-    1. Проект доступен по url: http://127.0.0.1
+    1. Проект доступен по url: http://127.0.0.1/users/
     2. Админка находится по адресу: http://127.0.0.1/admin/
+    3. Grafana доступна по url: http://127.0.0.1:3000
 
 ## В курсе дела
 
-На данный момент реализовано:
-
-    1. Инфроструктура проекта: Docker, Docker Compose, PostgreSQL, NGINX, CI ...
-    2. Приложения: аутентификация, продукты, лиды (потенциальные покупатели), контракты, активные клиенты, отслеживание метрик приложения.
-
-Планируется разработка последнего приложения - рекламная компания.
+Сдал проект на проверку куратору.

@@ -1,11 +1,9 @@
-from decimal import Decimal
-
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from django.db.models import Sum
 
 from .models import Customer
+from .utils import update_ad
 
 
 class CustomerList(PermissionRequiredMixin, ListView):
@@ -40,20 +38,7 @@ class CustomerCreate(PermissionRequiredMixin, CreateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        lead = self.object.lead
-        ad = lead.ad
-
-        ad.customers_count += 1
-        sum_contracts = Customer.objects.filter(lead__ad=ad).aggregate(
-            total=Sum('contract__cost')
-        )['total'] or 0
-
-        if sum_contracts > 0 and ad.budget > 0:
-            ad.profit = round((Decimal(str(sum_contracts)) / Decimal(str(ad.budget))), 2)
-        else:
-            ad.profit = Decimal('0')
-
-        ad.save()
+        update_ad(self.object, 'add')
         return response
 
 
@@ -82,18 +67,5 @@ class CustomerDelete(PermissionRequiredMixin, DeleteView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        lead = self.object.lead
-        ad = lead.ad
-
-        ad.customers_count -= 1
-        sum_contracts = Customer.objects.filter(lead__ad=ad).aggregate(
-            total=Sum('contract__cost')
-        )['total'] or 0
-
-        if sum_contracts > 0 and ad.budget > 0:
-            ad.profit = round((Decimal(str(sum_contracts)) / Decimal(str(ad.budget))), 2)
-        else:
-            ad.profit = Decimal('0')
-
-        ad.save()
+        update_ad(self.object, 'remove')
         return response
