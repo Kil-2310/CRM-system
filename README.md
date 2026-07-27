@@ -1,6 +1,6 @@
 # CRM-system
 
-**В CRM-системе сотрудники выполнябт следующие действия:**
+**В CRM-системе сотрудники выполняют следующие действия:**
 
     • ведут учёт предлагаемых компанией услуг;
     • запускают и завершают рекламные кампании;
@@ -34,12 +34,18 @@
     * PostgreSQL - основная реляционная база данных
     * SQLite - для разработки и тестирования
 
+### Мониторинг и логирование
+
+    * Loki - централизованное хранение логов
+    * Grafana - визуализация логов и метрик приложения
+
 ### Инфраструктура
 
     * Docker - контейнеризация приложения
     * Docker Compose - оркестрация контейнеров
     * Gunicorn - WSGI сервер для продакшена
     * Nginx - прокси-сервер и раздача статики
+    * CI - для непрерывного анализа кода по стандарту PEP8
 
 ## Инструкция по запуску и управлению проекта
 
@@ -47,10 +53,10 @@
 
 Перед запуском проекта необходимо:
 
-Установить Docker, по ссылке: https://docs.docker.com/engine/install/. Поставить плагин для логирования, коммандой: docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions Заполнить .env файл в корне проекта, по примеру, указанному ниже:
+Установить Docker, по ссылке: https://docs.docker.com/engine/install/. Поставить плагин для логирования, командой: docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions Заполнить .env файл в корне проекта, по примеру, указанному ниже:
     
     DJANGO_SECRET_KEY='django-insecure-$mo#_fhs_)4%_xfqel7b$d6jmu*n8i#wmlrqw=v_^t-s3@g+gt'
-    DJANGO_DEBUG=1
+    DJANGO_DEBUG=0
     DJANGO_LOGLEVEL=INFO
     DJANGO_ALLOWED_HOSTS=
     DJANGO_DOMAIN=
@@ -63,18 +69,9 @@
 ### Запуск и остановка проекта
 
 ``` bash
-docker compose build -d
+docker compose up -d --build 
 docker compose down
 ```
-
-
-### Аутентификация пользователей
-В системе множество ролей, под каждую свой интерфейс. У всех пользователей, кроме администратора, пароль 123123Qq:
-
-    1. Админимтратор. Username - admin, password - 123
-    2. Маркетогог. Username - Bob
-    3. Оператор. Username - Tom
-    4. Менеджер. Username - Kate
 
 ### URL приложения
 
@@ -82,6 +79,14 @@ docker compose down
     2. Админка находится по адресу: http://127.0.0.1/admin/
     3. Grafana доступна по url: http://127.0.0.1:3000
 
+## Аутентификация пользователей
+В системе множество ролей, под каждую свой интерфейс. У всех пользователей, кроме администратора, пароль 123123Qq:
+
+    1. Администратор. Username - admin, password - 123
+    2. Маркетолог. Username - Bob
+    3. Оператор. Username - Tom
+    4. Менеджер. Username - Kate
+
 ## В курсе дела
 
-Сдал проект на проверку куратору.
+Проект полностью готов к работе.
