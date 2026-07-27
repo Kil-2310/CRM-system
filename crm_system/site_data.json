@@ -1,0 +1,315 @@
+[
+  {
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+      "name": "Marketing",
+      "permissions": [
+        41,
+        42,
+        43,
+        44,
+        25,
+        26,
+        27,
+        28
+      ]
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 2,
+    "fields": {
+      "name": "Operator",
+      "permissions": [
+        44,
+        29,
+        30,
+        31,
+        32
+      ]
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 3,
+    "fields": {
+      "name": "Manager",
+      "permissions": [
+        44,
+        33,
+        34,
+        35,
+        36,
+        37,
+        40,
+        32
+      ]
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$F1Ezjwqi2ijYoY4YX8yRFz$tuvOXQvGJYihA5KAilibkJrKdXgIefmv+IGcn+8OJ4c=",
+      "last_login": "2026-07-25T20:49:56.769Z",
+      "is_superuser": true,
+      "username": "admin",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2026-07-22T12:34:58.040Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$Pu0QVwzCGEzRfKBuI8Eev0$3CwZJ/m1bybT8eNx7mQ8rlOscJxPE9rrlnkgtRuHbbA=",
+      "last_login": "2026-07-25T15:12:14.782Z",
+      "is_superuser": false,
+      "username": "Bob",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-07-23T12:46:53Z",
+      "groups": [1],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$FbsvSE1UvDyPgRn5HGnFj4$gDDqcglaCm2k0IYC85EzpcLKrF8Bs9GdWSnqLyNm4aM=",
+      "last_login": "2026-07-25T15:14:30.342Z",
+      "is_superuser": false,
+      "username": "Tom",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-07-23T18:57:49Z",
+      "groups": [2],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$K5HaM2ODdde27yci4cjbJO$jvWR1qhxdzqSkfONu4Hbdx5fuR+bv8HhldZeHRHgVUc=",
+      "last_login": "2026-07-25T15:12:37.058Z",
+      "is_superuser": false,
+      "username": "Kate",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-07-24T09:11:19Z",
+      "groups": [3],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 7,
+    "fields": {
+      "app_label": "product",
+      "model": "product"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 8,
+    "fields": {
+      "app_label": "lead",
+      "model": "lead"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 9,
+    "fields": {
+      "app_label": "contract",
+      "model": "contract"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 10,
+    "fields": {
+      "app_label": "customer",
+      "model": "customer"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 11,
+    "fields": {
+      "app_label": "ad",
+      "model": "ad"
+    }
+  },
+  {
+    "model": "product.product",
+    "pk": 1,
+    "fields": {
+      "name": "Верстка лендингов",
+      "description": "Верстка сайтов на HTML, CSS, Js.",
+      "cost": "1200.00",
+      "created_at": "2026-07-25T14:57:13.715Z",
+      "updated_at": "2026-07-25T14:57:13.715Z"
+    }
+  },
+  {
+    "model": "product.product",
+    "pk": 2,
+    "fields": {
+      "name": "Деплой сайтов",
+      "description": "Размещение сайтов на хостингею",
+      "cost": "400.00",
+      "created_at": "2026-07-25T14:57:48.294Z",
+      "updated_at": "2026-07-25T14:57:48.294Z"
+    }
+  },
+  {
+    "model": "lead.lead",
+    "pk": 1,
+    "fields": {
+      "last_name": "Евгений",
+      "first_name": "Хомяков",
+      "phone": "89999999999",
+      "email": "test1@gmail.com",
+      "created_at": "2026-07-25T14:59:10.298Z",
+      "updated_at": "2026-07-25T14:59:10.298Z",
+      "ad": 1
+    }
+  },
+  {
+    "model": "lead.lead",
+    "pk": 2,
+    "fields": {
+      "last_name": "Хохлов",
+      "first_name": "Артем",
+      "phone": "89990999099",
+      "email": "test2@gmial.com",
+      "created_at": "2026-07-25T15:00:25.091Z",
+      "updated_at": "2026-07-25T15:00:25.091Z",
+      "ad": 2
+    }
+  },
+  {
+    "model": "lead.lead",
+    "pk": 3,
+    "fields": {
+      "last_name": "Потапов",
+      "first_name": "Петя",
+      "phone": "8999099909",
+      "email": "test3@gmial.com",
+      "created_at": "2026-07-25T15:00:42.749Z",
+      "updated_at": "2026-07-25T15:00:42.749Z",
+      "ad": 1
+    }
+  },
+  {
+    "model": "contract.contract",
+    "pk": 1,
+    "fields": {
+      "name": "Создание сайта \"Мой заказ\"",
+      "start_date": "2026-07-23",
+      "end_date": "2026-08-23",
+      "cost": 9000,
+      "file": "",
+      "created_at": "2026-07-25T15:01:26.988Z",
+      "updated_at": "2026-07-25T15:01:26.988Z",
+      "product": 1
+    }
+  },
+  {
+    "model": "contract.contract",
+    "pk": 2,
+    "fields": {
+      "name": "Деплой сайта \"Яркий знак\"",
+      "start_date": "2026-07-23",
+      "end_date": "2026-07-29",
+      "cost": 3000,
+      "file": "",
+      "created_at": "2026-07-25T15:01:56.122Z",
+      "updated_at": "2026-07-25T15:01:56.122Z",
+      "product": 2
+    }
+  },
+  {
+    "model": "contract.contract",
+    "pk": 3,
+    "fields": {
+      "name": "Деплой сайта \"Маяк\"",
+      "start_date": "2026-07-23",
+      "end_date": "2026-08-23",
+      "cost": 1200,
+      "file": "",
+      "created_at": "2026-07-25T20:50:27.202Z",
+      "updated_at": "2026-07-25T20:50:27.202Z",
+      "product": 2
+    }
+  },
+  {
+    "model": "customer.customer",
+    "pk": 1,
+    "fields": {
+      "created_at": "2026-07-25T15:02:17.926Z",
+      "updated_at": "2026-07-25T15:02:17.926Z",
+      "lead": 1,
+      "contract": 1
+    }
+  },
+  {
+    "model": "customer.customer",
+    "pk": 2,
+    "fields": {
+      "created_at": "2026-07-25T15:05:17.909Z",
+      "updated_at": "2026-07-25T15:05:17.909Z",
+      "lead": 2,
+      "contract": 2
+    }
+  },
+  {
+    "model": "ad.ad",
+    "pk": 1,
+    "fields": {
+      "name": "Разработка сайтов с нуля!",
+      "budget": 145000,
+      "channel": "telegramm",
+      "leads_count": 2,
+      "customers_count": 1,
+      "profit": "0.06",
+      "created_at": "2026-07-25T14:58:19.958Z",
+      "updated_at": "2026-07-25T15:03:42.534Z",
+      "product": 1
+    }
+  },
+  {
+    "model": "ad.ad",
+    "pk": 2,
+    "fields": {
+      "name": "Размещение сайтов в интернете!",
+      "budget": 50000,
+      "channel": "max",
+      "leads_count": 1,
+      "customers_count": 1,
+      "profit": "0.06",
+      "created_at": "2026-07-25T14:58:46.156Z",
+      "updated_at": "2026-07-25T15:05:42.371Z",
+      "product": 2
+    }
+  }
+]
