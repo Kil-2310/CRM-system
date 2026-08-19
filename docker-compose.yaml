@@ -12,6 +12,11 @@ services:
     env_file:
       - ./.env
 
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'
+
   app:
     build:
       dockerfile: ./Dockerfile
@@ -32,6 +37,37 @@ services:
       - ./staticfiles/:/app/crm_system/staticfiles/
     depends_on:
       - postgres
+      - redis
+    env_file:
+      - ./.env
+
+  celery:
+    build:
+      dockerfile: ./Dockerfile
+    working_dir: /app/crm_system
+    command: celery -A crm_system worker --loglevel=INFO
+    logging:
+      driver: loki
+      options:
+        loki-url: http://localhost:3100/loki/api/v1/push
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - ./.env
+
+  celery-beat:
+    build:
+      dockerfile: ./Dockerfile
+    working_dir: /app/crm_system
+    command: celery -A crm_system beat --loglevel=INFO --schedule /tmp/celerybeat-schedule
+    logging:
+      driver: loki
+      options:
+        loki-url: http://localhost:3100/loki/api/v1/push
+    depends_on:
+      - postgres
+      - redis
     env_file:
       - ./.env
 

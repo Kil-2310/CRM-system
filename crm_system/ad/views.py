@@ -3,7 +3,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.urls import reverse_lazy
 
 from .models import Ad
-from .utils import update_ad
+from .tasks import update_ad_profit
 
 
 class AdListView(PermissionRequiredMixin, ListView):
@@ -46,7 +46,7 @@ class AdUpdateView(PermissionRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        update_ad(self.object)
+        update_ad_profit.delay(self.object)
         return response
 
 

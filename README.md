@@ -33,6 +33,7 @@
 
     * PostgreSQL - основная реляционная база данных
     * SQLite - для разработки и тестирования
+    * Redis - брокер для Celery
 
 ### Мониторинг и логирование
 
@@ -46,6 +47,7 @@
     * Gunicorn - WSGI сервер для продакшена
     * Nginx - прокси-сервер и раздача статики
     * CI - для непрерывного анализа кода по стандарту PEP8
+    * Celery и Celery beat - асинхронная очередь задач и процесс-планировщик
 
 ## Инструкция по запуску и управлению проекта
 
@@ -65,6 +67,10 @@
     POSTGRES_PASSWORD=123
     POSTGRES_DB=crm_database
     POSTGRES_PORT=5432
+
+    CELERY_BROKER_URL='redis://redis:6379/0'
+    CELERY_RESULT_BACKEND='redis://redis:6379/0'
+    CELERY_TASK_ALWAYS_EAGER=0
 
 ### Запуск и остановка проекта
 

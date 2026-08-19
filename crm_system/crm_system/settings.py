@@ -13,8 +13,9 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 from os import getenv
 import logging.config
+import sys
+from celery.schedules import crontab
 
-from django.template.defaultfilters import join
 from django.urls import reverse_lazy
 from dotenv import load_dotenv
 
@@ -196,4 +197,32 @@ LOGIN_URL = reverse_lazy("authentication:login")
 USER_DATA_TESTING = {
     "username": "bob",
     "password": "123"
+}
+
+# Celery config
+CELERY_BROKER_URL = getenv("CELERY_BROKER_URL", "redis://localhost:6379/0")
+CELERY_RESULT_BACKEND = getenv("CELERY_RESULT_BACKEND", "redis://localhost:6379/0")
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_IGNORE_RESULT = True
+CELERY_TASK_EAGER_PROPAGATES = True
+
+TESTING = 'test' in sys.argv
+if TESTING:
+    CELERY_TASK_ALWAYS_EAGER = True
+else:
+    CELERY_TASK_ALWAYS_EAGER = getenv('CELERY_TASK_ALWAYS_EAGER')
+
+CELERY_BEAT_SCHEDULE = {
+    'recalculate-ads-statistics': {
+        'task': 'ad.tasks.recalculate_all_ads_statistics',
+        'schedule': crontab(minute=0),
+    },
+    'check-expired-contracts': {
+        'task': 'contract.tasks.check_expired_contracts',
+        'schedule': crontab(hour=0, minute=0),
+    },
 }
